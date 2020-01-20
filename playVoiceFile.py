@@ -49,11 +49,13 @@ if __name__ == "__main__":
 
     def posSwitch(argument):
         posi = {
-            3: "/home/pi/Documents/Kiez:Schnitzel/Audios/misc/",
-            7: "/home/pi/Documents/Kiez:Schnitzel/Audios/buildings/",
-            11: "/home/pi/Documents/Kiez:Schnitzel/Audios/events/",
-            15: "/home/pi/Documents/Kiez:Schnitzel/Audios/nature/",
-            19: "/home/pi/Documents/Kiez:Schnitzel/Audios/people/"
+            cwd = os.getcwd()
+
+            3: cwd + '/Audios/misc/',
+            7: cwd + '/Audios/buildings/',
+            11: cwd + '/Audios/events/',
+            15: cwd + '/Audios/nature/',
+            19: cwd + '/Audios/people/'
         }
         return posi.get(argument)
     
