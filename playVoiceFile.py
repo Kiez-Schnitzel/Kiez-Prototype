@@ -8,12 +8,13 @@ if __name__ == "__main__":
 
     print('Program start.')
 
-    CLOCKPIN = 6
-    DATAPIN = 13
-    SWITCHPIN = 5
+    CLOCKPIN = 27
+    DATAPIN = 17
+    SWITCHPIN = 22
 
     #lcd = lcddriver.lcd()
     position = 0
+    os.getcwd()
 
     def rotaryChange(direction):
         global position
@@ -48,9 +49,9 @@ if __name__ == "__main__":
             os.system(command)
 
     def posSwitch(argument):
+        cwd=os.getcwd()
+        
         posi = {
-            cwd = os.getcwd()
-
             3: cwd + '/Audios/misc/',
             7: cwd + '/Audios/buildings/',
             11: cwd + '/Audios/events/',
