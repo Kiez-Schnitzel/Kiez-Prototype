@@ -28,7 +28,7 @@ if __name__ == "__main__":
         #lcd.lcd_clear()
         #lcd.lcd_messageToLine("Position :" + str(position%20), 2)
 
-        soundPath = posSwitch(position)
+        soundPath = posSwitch(position%20)
         # print(soundPath)
 
         if soundPath is not None:
