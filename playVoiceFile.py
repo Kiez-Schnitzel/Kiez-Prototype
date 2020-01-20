@@ -32,21 +32,24 @@ if __name__ == "__main__":
         # print(soundPath)
 
         if soundPath is not None:
-            command = "pkill aplay"
-            os.system(command)
+            if not os.listdir(soundPath) :
+                print("Es gibt keine Datei zum Abspielen.")
+            else:
+                command = "pkill aplay"
+                os.system(command)
 
-            listSounds = []
-            for (dirpath, dirnames, filenames) in os.walk(soundPath):
-                listSounds.extend(filenames)
-                break
+                listSounds = []
+                for (dirpath, dirnames, filenames) in os.walk(soundPath):
+                    listSounds.extend(filenames)
+                    break
 
-            print(*listSounds, sep = "\n")
+                print(*listSounds, sep = "\n")
 
-            sound_item = random.choice(listSounds)
-            command = "aplay " + soundPath + sound_item + " &"
-            #lcd.lcd_messageToLine(sound_item, 1)
-            print(command)
-            os.system(command)
+                sound_item = random.choice(listSounds)
+                command = "aplay " + soundPath + sound_item + " &"
+                #lcd.lcd_messageToLine(sound_item, 1)
+                print(command)
+                os.system(command)
 
     def posSwitch(argument):
         cwd=os.getcwd()
