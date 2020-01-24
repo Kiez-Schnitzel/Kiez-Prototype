@@ -16,6 +16,7 @@ import scipy.io.wavfile as wav
 import RPi.GPIO as GPIO
 import time
 from recorder import Recorder
+from multiprocessing import Process
 
 # Raspberry Pi
 # Aktueller Ordnerpfad
@@ -52,8 +53,9 @@ events = ['party', 'parties', 'concert', 'concerts',
           'demo', 'demonstration', 'event', 'events', 'marathon'
           'wedding', 'birthday', 'funeral']
 buildings = ['restaurant', 'restaurants', 'cafe', 'cinema', 'cinemas', 'kino',
-             'theater', 'school', 'schools', 'church', 'churchs', 'apartment',
-             'apartmentcomplex', 'house', 'library', 'shop', 'store', 'supermarket']
+             'theatre', 'school', 'schools', 'church', 'churchs', 'apartment',
+             'apartmentcomplex', 'house', 'library', 'shop', 'store', 'supermarket',
+             'door']
 people = ['people', 'police', 'firefighter', 'teacher', 'child', 'children',
           'pupil', 'student', 'students', 'grandmother', 'grandfather', 'father',
           'mother', 'mom', 'dad', 'fiance', 'wife', 'husband', 'brother',
@@ -134,33 +136,46 @@ def s2t(file):
     data = ds.stt(audio)
     return data
 
-def main():
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(buttonPin, GPIO.IN)
-    GPIO.setup(button2Pin, GPIO.IN)
-    GPIO.setup(ledPin, GPIO.OUT)
-    GPIO.output(ledPin, False)
-    wait = True
-    
-    print("Waiting ...")
-    while wait:
-        if GPIO.input(buttonPin) == GPIO.HIGH:
-            file = nameFile()
-            filename = record(project_root + file)
-            wait = False
-    time.sleep(1)
-    
-    print("Möchtest du deine Aufnahme löschen? Dann klicke auf den unteren Knopf. Du hast 5s für deine Entscheidung.")
-    start = time.process_time()
-    while (time.process_time() - start) < 5:
-        if GPIO.input(button2Pin) == GPIO.HIGH:
-            print("Aufnahme wurde gelöscht.")
-            return
-    
+def audioProcessing(filename,file):
     text = s2t(filename)
     cat = findCategories(text)
     print(text, file)
     move_file(file, cat[0])
+
+def main():
+    while(True):
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(buttonPin, GPIO.IN)
+        GPIO.setup(button2Pin, GPIO.IN)
+        GPIO.setup(ledPin, GPIO.OUT)
+        GPIO.output(ledPin, False)
+        wait = True
+        
+        print("Waiting ...")
+        while wait:
+            if GPIO.input(buttonPin) == GPIO.HIGH:
+                file = nameFile()
+                filename = record(project_root + file)
+                wait = False
+        time.sleep(1)
+        
+        delete = False
+        print("Möchtest du deine Aufnahme löschen? Dann klicke auf den unteren Knopf. Du hast 5s für deine Entscheidung.")
+        start = time.process_time()
+        while (time.process_time() - start) < 5:
+            if GPIO.input(button2Pin) == GPIO.HIGH:
+                print("Aufnahme wurde gelöscht.")
+                delete = True
+                break
+        
+        # Audioverarbeitung
+        if delete == False:
+            try:
+                p = Process(target=audioProcessing, args=(filename,file, ))
+                p.start()
+                #p.join()
+            except:
+                print("Couldn't process Audio.")
 
 if __name__ == "__main__":
     main()
