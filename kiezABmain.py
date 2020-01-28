@@ -1,7 +1,7 @@
 '''
     Autor: Felix Doege, Michael Pluhatsch, Tanita Daniel
     Erstellungssdatum: 20.01.2020
-    letzte Aederung: 20.01.2020
+    letzte Aederung: 28.01.2020
     Python Version: 3.7
     Getestet auf: Raspbian Buster
     Benötigt: deepspeech 0.6.0 (https://github.com/mozilla/DeepSpeech), RPi.GPIO
@@ -40,9 +40,12 @@ LANG_MODEL = 'deepspeech-0.6.0-models/lm.binary'
 TRIE_FILE = 'deepspeech-0.6.0-models/trie'
 
 # Pins der Objekte
-buttonPin = 11
-button2Pin = 13
-ledPin = 7
+buttonPin = 11 # record
+button2Pin = 13 # loeschen
+button3Pin = 35  # speichern
+ledPin = 7  # record
+led2Pin = 5 # beleuchtung
+halPin = 37 # Intro
 
 # Kategorien
 nature = ['tree', 'trees', 'dog', 'dogs', 'cat', 'cats', 'squirrel',
@@ -139,34 +142,57 @@ def s2t(file):
 def audioProcessing(filename,file):
     text = s2t(filename)
     cat = findCategories(text)
-    print(text, file)
+    #print(text, file)
     move_file(file, cat[0])
 
 def main():
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(buttonPin, GPIO.IN)
+    GPIO.setup(button2Pin, GPIO.IN)
+    GPIO.setup(button3Pin, GPIO.IN)
+    GPIO.setup(halPin, GPIO.IN)
+    GPIO.setup(ledPin, GPIO.OUT)
+    GPIO.setup(led2Pin, GPIO.OUT)
+    GPIO.output(ledPin, False)
     while(True):
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(buttonPin, GPIO.IN)
-        GPIO.setup(button2Pin, GPIO.IN)
-        GPIO.setup(ledPin, GPIO.OUT)
-        GPIO.output(ledPin, False)
         wait = True
+        mounted = GPIO.input(halPin) # zustand des trichters (HIGH - Am sensor, LOW - entfernt vom sensor)
+        # von 17 bis 7Uhr geht die Beleuchtung an
+        if datetime.datetime.now().time() >= datetime.time(17,0,0,0) or datetime.datetime.now().time() <= datetime.time(7,0,0,0):
+            GPIO.output(led2Pin, True)
+        else: GPIO.output(led2Pin, False)
         
         print("Waiting ...")
         while wait:
+            # starte Aufnahme
             if GPIO.input(buttonPin) == GPIO.HIGH:
                 file = nameFile()
                 filename = record(project_root + file)
                 wait = False
+            # spiele Intro ab, wenn Trichter an Saeule war und abgenommen wird
+            if GPIO.input(halPin) == GPIO.LOW and mounted == GPIO.HIGH:
+                print("Spiele Intro ab...", GPIO.input(halPin))
+                mounted = GPIO.LOW
+                time.sleep(3) # Intro Länge
+            # wenn Trichter zr gehaengt wird
+            if GPIO.input(halPin) == GPIO.HIGH and mounted == GPIO.LOW:
+                print("Hänge Trichter zurück...", GPIO.input(halPin))
+                mounted = GPIO.HIGH
+                time.sleep(2)
         time.sleep(1)
         
         delete = False
-        print("Möchtest du deine Aufnahme löschen? Dann klicke auf den unteren Knopf. Du hast 5s für deine Entscheidung.")
-        start = time.process_time()
-        while (time.process_time() - start) < 5:
+        wait = True
+        print("Möchtest du deine Aufnahme speichern oder löschen? Drücke auf den jeweiligen Knopf.")
+        while wait:
             if GPIO.input(button2Pin) == GPIO.HIGH:
                 print("Aufnahme wurde gelöscht.")
                 delete = True
-                break
+                wait = False
+            if GPIO.input(button3Pin) == GPIO.HIGH:
+                print("Aufnahme wurde gespeichert.")
+                wait = False
         
         # Audioverarbeitung
         if delete == False:
