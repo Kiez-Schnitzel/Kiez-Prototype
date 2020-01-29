@@ -67,7 +67,7 @@ SWITCHPIN = 29
 
 # HallSensor
 HALLPIN = 37 # intro
-HALL2PIN = 18 # reset Drehregler
+HALL2PIN = 38 # reset Drehregler
 
 # Kategorien
 nature = ['tree', 'trees', 'dog', 'dogs', 'cat', 'cats', 'squirrel',
