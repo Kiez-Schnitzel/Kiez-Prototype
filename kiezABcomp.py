@@ -314,6 +314,7 @@ def main():
     GPIO.setup(BUTTON3PIN, GPIO.IN)
     GPIO.setup(LEDPIN, GPIO.OUT)
     GPIO.output(LEDPIN, False)
+    GPIO.setup(LED2PIN, GPIO.OUT)
 
     # von 17 bis 7Uhr geht die Beleuchtung an
     if datetime.datetime.now().time() >= datetime.time(17,0,0,0) or datetime.datetime.now().time() <= datetime.time(7,0,0,0):
