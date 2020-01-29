@@ -170,7 +170,7 @@ def audioProcessing(filename,file):
 
 def playIntro(channel):
     global mounted
-    if GPIO.input(channel) == 1 and mounted == True:
+    if GPIO.input(channel) == 0 and mounted == True:
         command = "pkill aplay"
         os.system(command)
 
@@ -179,8 +179,11 @@ def playIntro(channel):
         print(command)
         os.system(command)
         mounted = False
-    if GPIO.input(channel) == 0 and mounted == False:
+
+        print(channel, mounted)
+    if GPIO.input(channel) == 1 and mounted == False:
         print("Hänge Trichter zurück...")
+        print(channel, mounted)
         mounted = True        
 
 # Spielt eine Audiodatei je nach Position des Drehreglers aus 
@@ -309,6 +312,8 @@ def main():
         mounted = True
     else:
         mounted = False
+
+    print(mounted)
 
     ky040.start()
     recordButton.start()
