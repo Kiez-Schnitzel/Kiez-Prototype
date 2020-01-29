@@ -47,10 +47,10 @@ TRIE_FILE = 'deepspeech-0.6.0-models/trie'
 
 # Alle Pinbelegungen:
 # Buttons:
-BUTTONPIN = 8   # record
-BUTTON2PIN = 10 # delete
+BUTTONPIN = 11   # record
+BUTTON2PIN = 13 # delete
 BUTTON3PIN = 35 # save
-BUTTONINTROPIN = 12
+#BUTTONINTROPIN = 12
 
 
 mounted = True
