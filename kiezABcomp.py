@@ -170,7 +170,7 @@ def audioProcessing(filename,file):
 
 def playIntro(channel):
     global mounted
-    if GPIO.input(channel) == 0 and mounted == True:
+    if GPIO.input(channel) == 0:
         command = "killall aplay"
         os.system(command)
 
@@ -181,7 +181,7 @@ def playIntro(channel):
         mounted = False
 
         print(channel, mounted)
-    if GPIO.input(channel) == 1 and mounted == False:
+    else:
         print("Hänge Trichter zurück...")
         mounted = True
         print(channel, mounted)
