@@ -61,9 +61,9 @@ LEDPIN = 7  # record
 LED2PIN = 5 # Beleuchtung
 
 # Drehregler
-CLOCKPIN = 13
-DATAPIN = 11
-SWITCHPIN = 15
+CLOCKPIN = 33
+DATAPIN = 31
+SWITCHPIN = 29
 
 # HallSensor
 HALLPIN = 37 # intro
