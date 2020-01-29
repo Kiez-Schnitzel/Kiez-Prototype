@@ -14,6 +14,8 @@ import scipy.io.wavfile as wav
 from recorder import Recorder
 from multiprocessing import Process
 from KY040 import KY040
+from Button import Button
+from HallSensor import HallSensor
 
 # Raspberry Pi
 # Root Ornderpfad
@@ -26,6 +28,9 @@ events = cwd + '/Audios/events/'
 nature = cwd + '/Audios/nature/'
 people = cwd + '/Audios/people/'
 misc = cwd + '/Audios/misc/'
+
+# Dateiname vom intro
+introFile = 'ex1.wav'
 
 # Position des Drehreglers
 position = 0
@@ -42,16 +47,27 @@ TRIE_FILE = 'deepspeech-0.6.0-models/trie'
 
 # Alle Pinbelegungen:
 # Buttons:
-BUTTONPIN = 11
-BUTTON2PIN = 13
+BUTTONPIN = 8   # record
+BUTTON2PIN = 10 # delete
+BUTTON3PIN = 35 # save
+BUTTONINTROPIN = 12
+
+
+mounted = True
+
 
 # LEDs
-LEDPIN = 7
+LEDPIN = 7  # record
+LED2PIN = 5 # Beleuchtung
 
-# PINs: Drehregler
-CLOCKPIN = 27
-DATAPIN = 17
-SWITCHPIN = 22
+# Drehregler
+CLOCKPIN = 13
+DATAPIN = 11
+SWITCHPIN = 15
+
+# HallSensor
+HALLPIN = 37 # intro
+HALL2PIN = 18 # reset Drehregler
 
 # Kategorien
 nature = ['tree', 'trees', 'dog', 'dogs', 'cat', 'cats', 'squirrel',
@@ -152,6 +168,21 @@ def audioProcessing(filename,file):
     print(text, file)
     move_file(file, cat[0])
 
+def playIntro(channel):
+    global mounted
+    if GPIO.input(channel) == 0 and mounted == True:
+        command = "pkill aplay"
+        os.system(command)
+
+        command = "aplay " + project_root + "/" + introFile + " &"
+        #lcd.lcd_messageToLine(sound_item, 1)
+        print(command)
+        os.system(command)
+        mounted = False
+    if GPIO.input(channel) == 1 and mounted == False:
+        print("Hänge Trichter zurück...")
+        mounted = True        
+
 # Spielt eine Audiodatei je nach Position des Drehreglers aus 
 def rotaryChange(direction):
     global position
@@ -215,51 +246,113 @@ def switchPressed(pin):
     #lcd.lcd_messageToLine("Position :" + str(position%20), 2)
     print("Position reset.")
 
+def buttonPressed(channel):
+    if GPIO.input(channel) == 1:
+        print("Record Button pressed")
+        file = nameFile()
+        filename = record(project_root + file)
+    else:
+        print("Record Button released")
+        delete = False
+        print("Möchtest du deine Aufnahme löschen? Dann klicke auf den unteren Knopf. Du hast 5s für deine Entscheidung.")
+        start = time.process_time()
+        while (time.process_time() - start) < 5:
+            if GPIO.input(BUTTON2PIN) == GPIO.HIGH:
+                print("Aufnahme wurde gelöscht.")
+                delete = True
+                break
+        
+        # Audioverarbeitung
+        if delete == False:
+            try:
+                print("Start")
+                p = Process(target=audioProcessing, args=(filename,file, ))
+                p.start()
+                # p.join()
+            except:
+                print("Couldn't process Audio.")
+
+# HallSensor
+# Called if sensor output changes
+def sensorTrigger(channel):
+    global position
+
+    if GPIO.input(channel):
+        # No magnet
+        print("No magnet")
+    else:
+        # Magnet
+        print("Magnet")
+        position = 0
+        #lcd.lcd_clear()
+        #lcd.lcd_messageToLine("Position reset", 1)
+        #lcd.lcd_messageToLine("Position :" + str(position%20), 2)
+        print("Position reset.")
+
 def main():
     # GPIO.setmode(GPIO.BCM)
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(BUTTONPIN, GPIO.IN)
+    GPIO.setwarnings(False)
+    # GPIO.setup(BUTTONPIN, GPIO.IN)
     GPIO.setup(BUTTON2PIN, GPIO.IN)
     GPIO.setup(LEDPIN, GPIO.OUT)
     GPIO.output(LEDPIN, False)
 
     wait = True
 
+    if(GPIO.input(halPin) == GPIO.HIGH):
+        mounted = True
+    else:
+        mounted = False
+
     ky040 = KY040(CLOCKPIN, DATAPIN, SWITCHPIN, rotaryChange, switchPressed)
+    recordButton = Button(BUTTONPIN, buttonPressed)
+    hallIntro = HallSensor(HALLPIN, playIntro)
+    hallSensor = HallSensor(HALL2PIN, sensorTrigger)
+
     ky040.start()
+    recordButton.start()
+    hallIntro.start()
+    hallSensor.start()
     
     print('Start program loop...')
+    print("Waiting ...")
     try:
         while(True):          
             
-            print("Waiting ...")
-            while wait:
-                if GPIO.input(BUTTONPIN) == GPIO.HIGH:
-                    file = nameFile()
-                    filename = record(project_root + file)
-                    wait = False
-            time.sleep(1)
+            # print("Waiting ...")
+            # while wait:
+            #     if GPIO.input(BUTTONPIN) == GPIO.HIGH:
+            #         file = nameFile()
+            #         # filename = record(project_root + file)
+            #         wait = False
+            time.sleep(0.1)
             
-            delete = False
-            print("Möchtest du deine Aufnahme löschen? Dann klicke auf den unteren Knopf. Du hast 5s für deine Entscheidung.")
-            start = time.process_time()
-            while (time.process_time() - start) < 5:
-                if GPIO.input(BUTTON2PIN) == GPIO.HIGH:
-                    print("Aufnahme wurde gelöscht.")
-                    delete = True
-                    break
+            # delete = False
+            # print("Möchtest du deine Aufnahme löschen? Dann klicke auf den unteren Knopf. Du hast 5s für deine Entscheidung.")
+            # start = time.process_time()
+            # while (time.process_time() - start) < 5:
+            #     if GPIO.input(BUTTON2PIN) == GPIO.HIGH:
+            #         print("Aufnahme wurde gelöscht.")
+            #         delete = True
+            #         break
             
-            # Audioverarbeitung
-            if delete == False:
-                try:
-                    p = Process(target=audioProcessing, args=(filename,file, ))
-                    p.start()
-                    #p.join()
-                except:
-                    print("Couldn't process Audio.")
+            # # Audioverarbeitung
+            # if delete == False:
+            #     try:
+            #         print("Start")
+            #         # p = Process(target=audioProcessing, args=(filename,file, ))
+            #         # p.start()
+            #         # p.join()
+            #     except:
+            #         print("Couldn't process Audio.")
     finally:
         print('Stopping GPIO monitoring...')
         ky040.stop()
+        recordButton.stop()
+        hallIntro.stop()
+        hallSensor.stop()
+
         GPIO.cleanup()
         print('Program ended.')
 
