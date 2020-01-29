@@ -174,6 +174,8 @@ def playIntro(channel):
         command = "killall aplay"
         os.system(command)
 
+        time.sleep(0.1)
+
         command = "aplay " + introFile + " &"
         #lcd.lcd_messageToLine(sound_item, 1)
         print(command)
@@ -182,6 +184,10 @@ def playIntro(channel):
 
         print("Es haengt kein Trichter:", GPIO.input(channel), mounted)
     elif GPIO.input(channel) == 1 and mounted == False:
+        command = "killall aplay"
+        os.system(command)
+
+        time.sleep(0.1)
         print("Hänge Trichter zurück...")
         mounted = True
         print(GPIO.input(channel), mounted)
