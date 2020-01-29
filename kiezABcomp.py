@@ -171,7 +171,7 @@ def audioProcessing(filename,file):
 def playIntro(channel):
     global mounted
     if GPIO.input(channel) == 0 and mounted == True:
-        command = "pkill aplay"
+        command = "killall aplay"
         os.system(command)
 
         command = "aplay " + introFile + " &"
