@@ -264,15 +264,29 @@ def buttonPressed(channel):
         file = nameFile()
         filename = record(project_root + file)
     else:
+
+
+print("Möchtest du deine Aufnahme speichern oder löschen? Drücke auf den jeweiligen Knopf.")
+        while wait:
+            if GPIO.input(button2Pin) == GPIO.HIGH:
+                print("Aufnahme wurde gelöscht.")
+                delete = True
+                wait = False
+            if GPIO.input(button3Pin) == GPIO.HIGH:
+                print("Aufnahme wurde gespeichert.")
+                wait = False
+
+
         print("Record Button released")
-        delete = False
-        print("Möchtest du deine Aufnahme löschen? Dann klicke auf den unteren Knopf. Du hast 5s für deine Entscheidung.")
+        delete = True
+        print("Möchtest du deine Aufnahme löschen? Drücke auf den jeweiligen Knopf.")
         start = time.process_time()
         while (time.process_time() - start) < 5:
             if GPIO.input(BUTTON2PIN) == GPIO.HIGH:
                 print("Aufnahme wurde gelöscht.")
                 delete = True
-                break
+            if GPIO.input(BUTTON3PIN) == GPIO.HIGH:
+                print("Aufnahme wurde gespeichert.")
         
         # Audioverarbeitung
         if delete == False:
@@ -305,8 +319,9 @@ def main():
     # GPIO.setmode(GPIO.BCM)
     GPIO.setmode(GPIO.BOARD)
     GPIO.setwarnings(False)
-    # GPIO.setup(BUTTONPIN, GPIO.IN)
+
     GPIO.setup(BUTTON2PIN, GPIO.IN)
+    GPIO.setup(BUTTON3PIN, GPIO.IN)
     GPIO.setup(LEDPIN, GPIO.OUT)
     GPIO.output(LEDPIN, False)
 
