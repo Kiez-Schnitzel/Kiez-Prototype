@@ -11,7 +11,7 @@ class HallSensor:
         GPIO.setup(hallPin , GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
     def start(self):
-        GPIO.add_event_detect(self.hallPin, GPIO.BOTH, callback=self.sensorCallback, bouncetime=100)  
+        GPIO.add_event_detect(self.hallPin, GPIO.BOTH, callback=self.sensorCallback)  
 
     def stop(self):
         GPIO.remove_event_detect(self.hallPin)
