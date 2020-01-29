@@ -264,19 +264,6 @@ def buttonPressed(channel):
         file = nameFile()
         filename = record(project_root + file)
     else:
-
-
-print("Möchtest du deine Aufnahme speichern oder löschen? Drücke auf den jeweiligen Knopf.")
-        while wait:
-            if GPIO.input(button2Pin) == GPIO.HIGH:
-                print("Aufnahme wurde gelöscht.")
-                delete = True
-                wait = False
-            if GPIO.input(button3Pin) == GPIO.HIGH:
-                print("Aufnahme wurde gespeichert.")
-                wait = False
-
-
         print("Record Button released")
         delete = True
         print("Möchtest du deine Aufnahme löschen? Drücke auf den jeweiligen Knopf.")
