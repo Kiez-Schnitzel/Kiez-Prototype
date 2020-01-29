@@ -300,7 +300,7 @@ def main():
 
     wait = True
 
-    if(GPIO.input(halPin) == GPIO.HIGH):
+    if(GPIO.input(HALLPIN) == GPIO.HIGH):
         mounted = True
     else:
         mounted = False
