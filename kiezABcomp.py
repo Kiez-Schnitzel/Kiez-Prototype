@@ -174,7 +174,7 @@ def playIntro(channel):
         command = "pkill aplay"
         os.system(command)
 
-        command = "aplay " + project_root + "/" + introFile + " &"
+        command = "aplay " + introFile + " &"
         #lcd.lcd_messageToLine(sound_item, 1)
         print(command)
         os.system(command)
