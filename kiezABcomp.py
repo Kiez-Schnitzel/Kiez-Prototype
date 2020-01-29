@@ -172,27 +172,27 @@ def playIntro(channel):
     global mounted
     if GPIO.input(channel) == 0:
         command = "pkill aplay"
-        print(command)
+        # print(command)
         os.system(command)
 
         time.sleep(0.1)
 
         command = "aplay " + introFile + " &"
         #lcd.lcd_messageToLine(sound_item, 1)
-        print(command)
+        # print(command)
         os.system(command)
         mounted = False
 
-        print("Es haengt kein Trichter:", GPIO.input(channel), mounted)
+        print("Es haengt kein Trichter!")
     if GPIO.input(channel) == 1:
         command = "killall aplay"
-        print(command)
+        # print(command)
         os.system(command)
 
         time.sleep(0.1)
-        print("Hänge Trichter zurück...")
+        print("Trichter wurde zurueck gehaengt...")
         mounted = True
-        print(GPIO.input(channel), mounted)
+        # print(GPIO.input(channel), mounted)
               
 
 # Spielt eine Audiodatei je nach Position des Drehreglers aus 
