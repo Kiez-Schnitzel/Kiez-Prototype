@@ -180,11 +180,11 @@ def playIntro(channel):
         os.system(command)
         mounted = False
 
-        print(channel, mounted)
+        print(GPIO.input(channel), mounted)
     elif GPIO.input(channel) == 1 and mounted == False:
         print("Hänge Trichter zurück...")
         mounted = True
-        print(channel, mounted)
+        print(GPIO.input(channel), mounted)
               
 
 # Spielt eine Audiodatei je nach Position des Drehreglers aus 
