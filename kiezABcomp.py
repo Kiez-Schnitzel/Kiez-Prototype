@@ -315,7 +315,10 @@ def main():
     GPIO.setup(LEDPIN, GPIO.OUT)
     GPIO.output(LEDPIN, False)
 
-    wait = True
+    # von 17 bis 7Uhr geht die Beleuchtung an
+    if datetime.datetime.now().time() >= datetime.time(17,0,0,0) or datetime.datetime.now().time() <= datetime.time(7,0,0,0):
+        GPIO.output(led2Pin, True)
+    else: GPIO.output(led2Pin, False)
 
     ky040 = KY040(CLOCKPIN, DATAPIN, SWITCHPIN, rotaryChange, switchPressed)
     recordButton = Button(BUTTONPIN, buttonPressed)
@@ -340,33 +343,7 @@ def main():
     print("Waiting ...")
     try:
         while(True):          
-            
-            # print("Waiting ...")
-            # while wait:
-            #     if GPIO.input(BUTTONPIN) == GPIO.HIGH:
-            #         file = nameFile()
-            #         # filename = record(project_root + file)
-            #         wait = False
             time.sleep(0.1)
-            
-            # delete = False
-            # print("Möchtest du deine Aufnahme löschen? Dann klicke auf den unteren Knopf. Du hast 5s für deine Entscheidung.")
-            # start = time.process_time()
-            # while (time.process_time() - start) < 5:
-            #     if GPIO.input(BUTTON2PIN) == GPIO.HIGH:
-            #         print("Aufnahme wurde gelöscht.")
-            #         delete = True
-            #         break
-            
-            # # Audioverarbeitung
-            # if delete == False:
-            #     try:
-            #         print("Start")
-            #         # p = Process(target=audioProcessing, args=(filename,file, ))
-            #         # p.start()
-            #         # p.join()
-            #     except:
-            #         print("Couldn't process Audio.")
     finally:
         print('Stopping GPIO monitoring...')
         ky040.stop()
