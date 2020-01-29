@@ -180,7 +180,7 @@ def playIntro(channel):
         os.system(command)
         mounted = False
 
-        print(GPIO.input(channel), mounted)
+        print("Es haengt kein Trichter:", GPIO.input(channel), mounted)
     elif GPIO.input(channel) == 1 and mounted == False:
         print("Hänge Trichter zurück...")
         mounted = True
