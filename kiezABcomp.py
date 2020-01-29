@@ -300,15 +300,15 @@ def main():
 
     wait = True
 
-    if(GPIO.input(HALLPIN) == GPIO.HIGH):
-        mounted = True
-    else:
-        mounted = False
-
     ky040 = KY040(CLOCKPIN, DATAPIN, SWITCHPIN, rotaryChange, switchPressed)
     recordButton = Button(BUTTONPIN, buttonPressed)
     hallIntro = HallSensor(HALLPIN, playIntro)
     hallSensor = HallSensor(HALL2PIN, sensorTrigger)
+
+    if(GPIO.input(HALLPIN) == GPIO.HIGH):
+        mounted = True
+    else:
+        mounted = False
 
     ky040.start()
     recordButton.start()
