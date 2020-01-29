@@ -272,8 +272,11 @@ def buttonPressed(channel):
             if GPIO.input(BUTTON2PIN) == GPIO.HIGH:
                 print("Aufnahme wurde gelöscht.")
                 delete = True
+                break
             if GPIO.input(BUTTON3PIN) == GPIO.HIGH:
                 print("Aufnahme wurde gespeichert.")
+                delete = False
+                break
         
         # Audioverarbeitung
         if delete == False:
