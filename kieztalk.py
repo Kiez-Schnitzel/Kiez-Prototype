@@ -1,10 +1,10 @@
 '''
     Autor: Felix Doege, Michael Pluhatsch, Tanita Daniel
     Erstellungssdatum: 28.01.2020
-    letzte Aederung: 28.01.2020
+    letzte Aederung: 03.02.2020
     Python Version: 3.7
     Getestet auf: Raspbian Buster
-    Benötigt: deepspeech 0.6.0 (https://github.com/mozilla/DeepSpeech), RPi.GPIO
+    Benötigt: deepspeech 0.6.1 (https://github.com/mozilla/DeepSpeech), RPi.GPIO
 '''
 import RPi.GPIO as GPIO
 import shutil
@@ -41,9 +41,9 @@ list_of_paths = [buildings, events, nature, people, misc]
 
 
 # nötige Daten für das englische trainierte Model
-MODEL_FILE = 'deepspeech-0.6.0-models/output_graph.tflite'
-LANG_MODEL = 'deepspeech-0.6.0-models/lm.binary'
-TRIE_FILE = 'deepspeech-0.6.0-models/trie'
+MODEL_FILE = 'deepspeech-0.6.1-models/output_graph.tflite'
+LANG_MODEL = 'deepspeech-0.6.1-models/lm.binary'
+TRIE_FILE = 'deepspeech-0.6.1-models/trie'
 
 # Alle Pinbelegungen:
 # Buttons:
