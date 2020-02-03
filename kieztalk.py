@@ -270,7 +270,6 @@ def buttonPressed(channel):
         start = time.process_time()
         while (time.process_time() - start) < 5:
             if GPIO.input(BUTTON2PIN) == GPIO.HIGH:
-                print("Aufnahme wurde gelöscht.")
                 delete = True
                 break
             if GPIO.input(BUTTON3PIN) == GPIO.HIGH:
@@ -282,11 +281,15 @@ def buttonPressed(channel):
         if delete == False:
             try:
                 print("Start")
+                print(filename)
                 p = Process(target=audioProcessing, args=(filename,file, ))
                 p.start()
                 # p.join()
             except:
-                print("Couldn't process Audio.")
+                e = sys.exc_info()[0]
+                print("Couldn't process Audio:", e)
+        else:
+            print("Aufnahme wurde gelöscht.")
 
 # HallSensor
 # Called if sensor output changes
