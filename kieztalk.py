@@ -89,9 +89,9 @@ people = ['people', 'police', 'firefighter', 'teacher', 'child', 'children',
 # Erstellt einen Dateinamen mit der aktuellen Zeit
 def nameFile():
     # Zeitstempel
-    Current_Date = datetime.datetime.today().strftime ('%d-%b-%Y')
-    Current_Time = datetime.datetime.now().strftime ('%H-%M-%S')
-    return str(Current_Time) + '-' + str(Current_Date) + '-' + '.wav'
+    Current_Date = datetime.datetime.today().strftime('%Y-%m-%d')
+    Current_Time = datetime.datetime.now().strftime('%H-%M-%S')
+    return str(Current_Date) + '-' + str(Current_Time) + '.wav'
 
 # Verschiebe eine Datei in die korrekte Kategorie
 def move_file(file, category):
