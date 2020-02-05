@@ -213,6 +213,10 @@ def rotaryChange(direction):
     #lcd.lcd_messageToLine("Position :" + str(position%20), 2)
 
     soundPath = posSwitch(position%20)
+    # Wenn Shuffle ausgewaehlt ist, waehle eine "random" Kategorie
+    if position%20 == 1:
+        positions = [3,7,11,15,19]
+        soundPath = posSwitch(random.choice(positions)))
     # print(soundPath)
 
     if soundPath is not None:
