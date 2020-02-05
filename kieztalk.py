@@ -85,7 +85,7 @@ events = ['party', 'parties', 'concert', 'concerts',
 buildings = ['restaurant', 'restaurants', 'cafe', 'cinema', 'cinemas', 'kino',
              'theatre', 'school', 'schools', 'church', 'churchs', 'apartment',
              'apartmentcomplex', 'house', 'library', 'shop', 'store', 'supermarket',
-             'door']
+             'door', 'building', 'buildings']
 people = ['people', 'police', 'firefighter', 'teacher', 'child', 'children',
           'pupil', 'student', 'students', 'grandmother', 'grandfather', 'father',
           'mother', 'mom', 'dad', 'fiance', 'wife', 'husband', 'brother',
@@ -104,15 +104,15 @@ def move_file(file, category):
     counter = 0
     for i in list_of_category:
         
-        if category == i:
+        if i in category:
             path2source = project_root + file
-            #print(path2source) # Testen ob Pfad korrekt
+            print(path2source) # Testen ob Pfad korrekt
             
             path2target = list_of_paths[counter] + file
-            #print(list_of_paths[counter] + file) # Testen ob Pfad korrekt
+            print(list_of_paths[counter] + file) # Testen ob Pfad korrekt
             # Versuche Datei zu verschieben
             try:
-                shutil.move(path2source, path2target)
+                shutil.copy(path2source, path2target)
                 print("File was moved to ",category)
             except:
                 print("File not found")
