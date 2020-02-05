@@ -1,10 +1,10 @@
 '''
     Autor: Felix Doege, Michael Pluhatsch, Tanita Daniel
     Erstellungssdatum: 28.01.2020
-    letzte Aederung: 28.01.2020
+    letzte Aederung: 03.02.2020
     Python Version: 3.7
     Getestet auf: Raspbian Buster
-    Benötigt: deepspeech 0.6.0 (https://github.com/mozilla/DeepSpeech), RPi.GPIO
+    Benötigt: deepspeech 0.6.1 (https://github.com/mozilla/DeepSpeech), RPi.GPIO
 '''
 import RPi.GPIO as GPIO
 import shutil
@@ -46,9 +46,9 @@ list_of_paths = [buildings, events, nature, people, misc]
 
 
 # nötige Daten für das englische trainierte Model
-MODEL_FILE = 'deepspeech-0.6.0-models/output_graph.tflite'
-LANG_MODEL = 'deepspeech-0.6.0-models/lm.binary'
-TRIE_FILE = 'deepspeech-0.6.0-models/trie'
+MODEL_FILE = 'deepspeech-0.6.1-models/output_graph.tflite'
+LANG_MODEL = 'deepspeech-0.6.1-models/lm.binary'
+TRIE_FILE = 'deepspeech-0.6.1-models/trie'
 
 # Alle Pinbelegungen:
 # Buttons:
@@ -94,9 +94,9 @@ people = ['people', 'police', 'firefighter', 'teacher', 'child', 'children',
 # Erstellt einen Dateinamen mit der aktuellen Zeit
 def nameFile():
     # Zeitstempel
-    Current_Date = datetime.datetime.today().strftime ('%d-%b-%Y')
-    Current_Time = datetime.datetime.now().strftime ('%H-%M-%S')
-    return str(Current_Time) + '-' + str(Current_Date) + '-' + '.wav'
+    Current_Date = datetime.datetime.today().strftime('%Y-%m-%d')
+    Current_Time = datetime.datetime.now().strftime('%H-%M-%S')
+    return str(Current_Date) + '-' + str(Current_Time) + '.wav'
 
 # Verschiebe eine Datei in die korrekte Kategorie
 def move_file(file, category):
@@ -278,7 +278,6 @@ def buttonPressed(channel):
         start = time.process_time()
         while (time.process_time() - start) < 5:
             if GPIO.input(BUTTON2PIN) == GPIO.HIGH:
-                print("Aufnahme wurde gelöscht.")
                 delete = True
                 break
             if GPIO.input(BUTTON3PIN) == GPIO.HIGH:
@@ -296,10 +295,15 @@ def buttonPressed(channel):
                 gFile = None
                 filename = None
             except:
-                print("Couldn't process Audio.")
+                e = sys.exc_info()[0]
+                print("Couldn't process Audio:", e)
+                
         if delete == True and gFile is not None:
             gFile = None
             filename = None
+            
+            print("Aufnahme wurde gelöscht.")
+
 
 # HallSensor
 # Called if sensor output changes
