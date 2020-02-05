@@ -171,7 +171,7 @@ def audioProcessing(filename,file):
     text = s2t(filename)
     cat = findCategories(text)
     print(text, file)
-    move_file(file, cat[0])
+    move_file(file, cat)
 
 def playIntro(channel):
     global mounted
@@ -216,7 +216,7 @@ def rotaryChange(direction):
     # Wenn Shuffle ausgewaehlt ist, waehle eine "random" Kategorie
     if position%20 == 1:
         positions = [3,7,11,15,19]
-        soundPath = posSwitch(random.choice(positions)))
+        soundPath = posSwitch(random.choice(positions))
     # print(soundPath)
 
     if soundPath is not None:
