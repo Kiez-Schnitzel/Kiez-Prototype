@@ -267,11 +267,11 @@ def buttonPressed(channel):
     global gFile
     global filename
 
-    if GPIO.input(channel) == 1:
+    if GPIO.input(channel) == 1 and gFile is None:
         print("Record Button pressed")
         gFile = nameFile()
         filename = record(project_root + gFile)
-    if GPIO.input(channel) == 0:
+    if GPIO.input(channel) == 0 and gFile is not None:
         print("Record Button released")
         delete = True
         print("Möchtest du deine Aufnahme löschen? Drücke auf den jeweiligen Knopf.")

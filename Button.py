@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 
 class Button:
 
-    DEBOUNCE = 200
+    DEBOUNCE = 500
 
     def __init__(self, buttonPin, pressedCallback):
         #persist values
