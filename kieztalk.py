@@ -32,8 +32,13 @@ misc = cwd + '/Audios/misc/'
 # Dateiname vom intro
 introFile = 'ex1.wav'
 
+# global record Filename
+filename = None
+gFile = None
+
 # Position des Drehreglers
 position = 0
+
 
 # Liste mit allen Kategorien
 list_of_category = ["buildings", "events", "nature", "people", "misc"]
@@ -259,11 +264,14 @@ def switchPressed(pin):
     print("Position reset.")
 
 def buttonPressed(channel):
+    global gFile
+    global filename
+
     if GPIO.input(channel) == 1:
         print("Record Button pressed")
-        file = nameFile()
-        filename = record(project_root + file)
-    else:
+        gFile = nameFile()
+        filename = record(project_root + gFile)
+    if GPIO.input(channel) == 0:
         print("Record Button released")
         delete = True
         print("Möchtest du deine Aufnahme löschen? Drücke auf den jeweiligen Knopf.")
@@ -279,14 +287,19 @@ def buttonPressed(channel):
                 break
         
         # Audioverarbeitung
-        if delete == False:
+        if delete == False and gFile is not None:
             try:
                 print("Start")
-                p = Process(target=audioProcessing, args=(filename,file, ))
+                p = Process(target=audioProcessing, args=(filename,gFile, ))
                 p.start()
                 # p.join()
+                gFile = None
+                filename = None
             except:
                 print("Couldn't process Audio.")
+        if delete == True and gFile is not None:
+            gFile = None
+            filename = None
 
 # HallSensor
 # Called if sensor output changes
