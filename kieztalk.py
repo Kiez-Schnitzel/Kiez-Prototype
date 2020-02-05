@@ -333,11 +333,6 @@ def main():
     GPIO.output(LEDPIN, False)
     GPIO.setup(LED2PIN, GPIO.OUT)
 
-    # von 17 bis 7Uhr geht die Beleuchtung an
-    if datetime.datetime.now().time() >= datetime.time(17,0,0,0) or datetime.datetime.now().time() <= datetime.time(7,0,0,0):
-        GPIO.output(LED2PIN, True)
-    else: GPIO.output(LED2PIN, False)
-
     ky040 = KY040(CLOCKPIN, DATAPIN, SWITCHPIN, rotaryChange, switchPressed)
     recordButton = Button(BUTTONPIN, buttonPressed)
     hallIntro = HallSensor(HALLPIN, playIntro)
@@ -360,7 +355,11 @@ def main():
     print('Start program loop...')
     print("Waiting ...")
     try:
-        while(True):          
+        while(True):
+            # von 17 bis 7Uhr geht die Beleuchtung an
+            if datetime.datetime.now().time() >= datetime.time(17,0,0,0) or datetime.datetime.now().time() <= datetime.time(7,0,0,0):
+                GPIO.output(LED2PIN, True)
+            else: GPIO.output(LED2PIN, False)      
             time.sleep(0.1)
     finally:
         print('Stopping GPIO monitoring...')
