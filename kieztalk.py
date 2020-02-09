@@ -32,6 +32,7 @@ misc = cwd + '/Audios/misc/'
 
 # Dateiname vom intro
 introFile = 'ex1.wav'
+recordIntro = 'recordIntro.wav'
 
 # global record Filename
 filename = None
@@ -39,6 +40,8 @@ gFile = None
 
 # Position des Drehreglers
 position = 0
+clkPinLast = 0
+clkPinCurrent = 0
 
 
 # Liste mit allen Kategorien
@@ -207,41 +210,55 @@ def playIntro(channel):
 # Spielt eine Audiodatei je nach Position des Drehreglers aus 
 def rotaryChange(direction):
     global position
-    if direction == 0:
-        position += 1
-    else:
-        position -= 1
 
-    print(str(position%20))
-    #lcd.lcd_clear()
-    #lcd.lcd_messageToLine("Position :" + str(position%20), 2)
+    clkPinCurrent = GPIO.input(CLOCKPIN)
 
-    soundPath = posSwitch(position%20)
-    # Wenn Shuffle ausgewaehlt ist, waehle eine "random" Kategorie
-    if position%20 == 9:
-        positions = [0,3,4,9,1]
-        soundPath = posSwitch(random.choice(positions))
-    # print(soundPath)
-
-    if soundPath is not None:
-        if not os.listdir(soundPath) :
-            print("Es gibt keine Datei zum Abspielen.")
+    if clkPinCurrent != clkPinLast:
+        if GPIO.input(DATAPIN) != PIN_CLK_AKTUELL:
+            position += 1
         else:
+            position -= 1
+
+        print(str(position%20))
+        #lcd.lcd_clear()
+        #lcd.lcd_messageToLine("Position :" + str(position%20), 2)
+
+        soundPath = posSwitch(position%20)
+        # Wenn Shuffle ausgewaehlt ist, waehle eine "random" Kategorie
+        if position%20 == 9:
+            positions = [0,3,4,9,1]
+            soundPath = posSwitch(random.choice(positions))
+        # print(soundPath)
+
+        # Spiele record intro, wenn ausgewaehlt
+        if position%20 == 14:
+            soundPath = None
             command = "pkill aplay"
             os.system(command)
 
-            listSounds = []
-            for (dirpath, dirnames, filenames) in os.walk(soundPath):
-                listSounds.extend(filenames)
-                break
+            time.sleep(0.1)
 
-            print(*listSounds, sep = "\n")
+            command = "aplay " + recordIntro + " &"
 
-            sound_item = random.choice(listSounds)
-            command = "aplay " + soundPath + sound_item + " &"
-            #lcd.lcd_messageToLine(sound_item, 1)
-            print(command)
-            os.system(command)
+        if soundPath is not None:
+            if not os.listdir(soundPath) :
+                print("Es gibt keine Datei zum Abspielen.")
+            else:
+                command = "pkill aplay"
+                os.system(command)
+
+                listSounds = []
+                for (dirpath, dirnames, filenames) in os.walk(soundPath):
+                    listSounds.extend(filenames)
+                    break
+
+                # print(*listSounds, sep = "\n")
+
+                sound_item = random.choice(listSounds)
+                command = "aplay " + soundPath + sound_item + " &"
+                #lcd.lcd_messageToLine(sound_item, 1)
+                print(command)
+                os.system(command)
 
 # Switch-Case fuer die Positionen des Drehreglers:
 # Gibt den Ordnerpfad zur Position aus
@@ -363,6 +380,9 @@ def main():
     recordButton.start()
     hallIntro.start()
     hallSensor.start()
+
+    # Initiales Auslesen des clkPin
+    clkPinLast = GPIO.input(CLOCKPIN)
     
     print('Start program loop...')
     print("Waiting ...")
@@ -372,7 +392,7 @@ def main():
             if datetime.datetime.now().time() >= datetime.time(17,0,0,0) or datetime.datetime.now().time() <= datetime.time(7,0,0,0):
                 GPIO.output(LED2PIN, True)
             else: GPIO.output(LED2PIN, False)      
-            time.sleep(0.1)
+            time.sleep(0.01)
     finally:
         print('Stopping GPIO monitoring...')
         ky040.stop()
