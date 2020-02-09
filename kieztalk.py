@@ -121,7 +121,7 @@ def move_file(file, category):
 
 # Startet eine aufnahme uber ein Mikrofon
 def record(filename):
-    rec = Recorder(channels = 1, rate = 22000) # da deepspeech, nur 16000hz 
+    rec = Recorder(channels = 1, rate = 16000) # da deepspeech, nur 16000hz 
     recfile = rec.open(filename, 'wb')
     # starte Aufnahme
     recfile.start_recording()
