@@ -16,6 +16,7 @@ from multiprocessing import Process
 from KY040 import KY040
 from Button import Button
 from HallSensor import HallSensor
+from pydub import AudioSegment
 
 # Raspberry Pi
 # Root Ornderpfad
@@ -32,8 +33,13 @@ misc = cwd + '/Audios/misc/'
 # Dateiname vom intro
 introFile = 'ex1.wav'
 
+# global record Filename
+filename = None
+gFile = None
+
 # Position des Drehreglers
 position = 0
+
 
 # Liste mit allen Kategorien
 list_of_category = ["buildings", "events", "nature", "people", "misc"]
@@ -80,7 +86,7 @@ events = ['party', 'parties', 'concert', 'concerts',
 buildings = ['restaurant', 'restaurants', 'cafe', 'cinema', 'cinemas', 'kino',
              'theatre', 'school', 'schools', 'church', 'churchs', 'apartment',
              'apartmentcomplex', 'house', 'library', 'shop', 'store', 'supermarket',
-             'door']
+             'door', 'building', 'buildings']
 people = ['people', 'police', 'firefighter', 'teacher', 'child', 'children',
           'pupil', 'student', 'students', 'grandmother', 'grandfather', 'father',
           'mother', 'mom', 'dad', 'fiance', 'wife', 'husband', 'brother',
@@ -89,9 +95,9 @@ people = ['people', 'police', 'firefighter', 'teacher', 'child', 'children',
 # Erstellt einen Dateinamen mit der aktuellen Zeit
 def nameFile():
     # Zeitstempel
-    Current_Date = datetime.datetime.today().strftime ('%d-%b-%Y')
-    Current_Time = datetime.datetime.now().strftime ('%H-%M-%S')
-    return str(Current_Time) + '-' + str(Current_Date) + '-' + '.wav'
+    Current_Date = datetime.datetime.today().strftime('%Y-%m-%d')
+    Current_Time = datetime.datetime.now().strftime('%H-%M-%S')
+    return str(Current_Date) + '-' + str(Current_Time) + '.wav'
 
 # Verschiebe eine Datei in die korrekte Kategorie
 def move_file(file, category):
@@ -99,15 +105,15 @@ def move_file(file, category):
     counter = 0
     for i in list_of_category:
         
-        if category == i:
+        if i in category:
             path2source = project_root + file
-            #print(path2source) # Testen ob Pfad korrekt
+            print(path2source) # Testen ob Pfad korrekt
             
             path2target = list_of_paths[counter] + file
-            #print(list_of_paths[counter] + file) # Testen ob Pfad korrekt
+            print(list_of_paths[counter] + file) # Testen ob Pfad korrekt
             # Versuche Datei zu verschieben
             try:
-                shutil.move(path2source, path2target)
+                shutil.copy(path2source, path2target)
                 print("File was moved to ",category)
             except:
                 print("File not found")
@@ -115,7 +121,7 @@ def move_file(file, category):
 
 # Startet eine aufnahme uber ein Mikrofon
 def record(filename):
-    rec = Recorder(channels = 1, rate = 16000) # da deepspeech, nur 16000hz 
+    rec = Recorder(channels = 1, rate = 22000) # da deepspeech, nur 16000hz 
     recfile = rec.open(filename, 'wb')
     # starte Aufnahme
     recfile.start_recording()
@@ -165,8 +171,11 @@ def s2t(file):
 def audioProcessing(filename,file):
     text = s2t(filename)
     cat = findCategories(text)
+    song = AudioSegment.from_wav(filename)
+    song = song+6
+    song.export(filename, format='wav')
     print(text, file)
-    move_file(file, cat[0])
+    move_file(file, cat)
 
 def playIntro(channel):
     global mounted
@@ -208,6 +217,10 @@ def rotaryChange(direction):
     #lcd.lcd_messageToLine("Position :" + str(position%20), 2)
 
     soundPath = posSwitch(position%20)
+    # Wenn Shuffle ausgewaehlt ist, waehle eine "random" Kategorie
+    if position%20 == 1:
+        positions = [3,7,11,15,19]
+        soundPath = posSwitch(random.choice(positions))
     # print(soundPath)
 
     if soundPath is not None:
@@ -259,11 +272,14 @@ def switchPressed(pin):
     print("Position reset.")
 
 def buttonPressed(channel):
-    if GPIO.input(channel) == 1:
+    global gFile
+    global filename
+
+    if GPIO.input(channel) == 1 and gFile is None:
         print("Record Button pressed")
-        file = nameFile()
-        filename = record(project_root + file)
-    else:
+        gFile = nameFile()
+        filename = record(project_root + gFile)
+    if GPIO.input(channel) == 0 and gFile is not None:
         print("Record Button released")
         delete = True
         print("Möchtest du deine Aufnahme löschen? Drücke auf den jeweiligen Knopf.")
@@ -278,18 +294,24 @@ def buttonPressed(channel):
                 break
         
         # Audioverarbeitung
-        if delete == False:
+        if delete == False and gFile is not None:
             try:
                 print("Start")
-                print(filename)
-                p = Process(target=audioProcessing, args=(filename,file, ))
+                p = Process(target=audioProcessing, args=(filename,gFile, ))
                 p.start()
                 # p.join()
+                gFile = None
+                filename = None
             except:
                 e = sys.exc_info()[0]
                 print("Couldn't process Audio:", e)
-        else:
+                
+        if delete == True and gFile is not None:
+            gFile = None
+            filename = None
+            
             print("Aufnahme wurde gelöscht.")
+
 
 # HallSensor
 # Called if sensor output changes
@@ -315,14 +337,12 @@ def main():
 
     GPIO.setup(BUTTON2PIN, GPIO.IN)
     GPIO.setup(BUTTON3PIN, GPIO.IN)
+    GPIO.setup(BUTTON2PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setup(BUTTON3PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
     GPIO.setup(LEDPIN, GPIO.OUT)
     GPIO.output(LEDPIN, False)
     GPIO.setup(LED2PIN, GPIO.OUT)
-
-    # von 17 bis 7Uhr geht die Beleuchtung an
-    if datetime.datetime.now().time() >= datetime.time(17,0,0,0) or datetime.datetime.now().time() <= datetime.time(7,0,0,0):
-        GPIO.output(LED2PIN, True)
-    else: GPIO.output(LED2PIN, False)
 
     ky040 = KY040(CLOCKPIN, DATAPIN, SWITCHPIN, rotaryChange, switchPressed)
     recordButton = Button(BUTTONPIN, buttonPressed)
@@ -346,7 +366,11 @@ def main():
     print('Start program loop...')
     print("Waiting ...")
     try:
-        while(True):          
+        while(True):
+            # von 17 bis 7Uhr geht die Beleuchtung an
+            if datetime.datetime.now().time() >= datetime.time(17,0,0,0) or datetime.datetime.now().time() <= datetime.time(7,0,0,0):
+                GPIO.output(LED2PIN, True)
+            else: GPIO.output(LED2PIN, False)      
             time.sleep(0.1)
     finally:
         print('Stopping GPIO monitoring...')
