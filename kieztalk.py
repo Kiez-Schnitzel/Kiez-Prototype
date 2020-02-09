@@ -333,6 +333,9 @@ def main():
 
     GPIO.setup(BUTTON2PIN, GPIO.IN)
     GPIO.setup(BUTTON3PIN, GPIO.IN)
+    GPIO.setup(BUTTON2PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setup(BUTTON3PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
     GPIO.setup(LEDPIN, GPIO.OUT)
     GPIO.output(LEDPIN, False)
     GPIO.setup(LED2PIN, GPIO.OUT)
