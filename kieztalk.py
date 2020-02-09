@@ -218,8 +218,8 @@ def rotaryChange(direction):
 
     soundPath = posSwitch(position%20)
     # Wenn Shuffle ausgewaehlt ist, waehle eine "random" Kategorie
-    if position%20 == 1:
-        positions = [3,7,11,15,19]
+    if position%20 == 9:
+        positions = [0,3,4,9,1]
         soundPath = posSwitch(random.choice(positions))
     # print(soundPath)
 
@@ -249,11 +249,12 @@ def posSwitch(argument):
     cwd=os.getcwd()
 
     posi = {
-    3: cwd + '/Audios/misc/',
-    7: cwd + '/Audios/buildings/',
-    11: cwd + '/Audios/events/',
-    15: cwd + '/Audios/nature/',
-    19: cwd + '/Audios/people/'
+    9: cwd + '/Audios/misc/',
+    0: cwd + '/Audios/buildings/',
+    3: cwd + '/Audios/events/',
+    4: cwd + '/Audios/nature/',
+    1: cwd + '/Audios/people/',
+    #14: 'Audios/'
     }
     return posi.get(argument)
 
