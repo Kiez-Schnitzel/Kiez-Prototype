@@ -32,6 +32,7 @@ misc = cwd + '/Audios/misc/'
 
 # Dateiname vom intro
 introFile = 'ex1.wav'
+recordIntro = 'recordIntro.wav'
 
 # global record Filename
 filename = None
@@ -39,7 +40,6 @@ gFile = None
 
 # Position des Drehreglers
 position = 0
-
 
 # Liste mit allen Kategorien
 list_of_category = ["buildings", "events", "nature", "people", "misc"]
@@ -207,7 +207,9 @@ def playIntro(channel):
 # Spielt eine Audiodatei je nach Position des Drehreglers aus 
 def rotaryChange(direction):
     global position
-    if direction == 0:
+
+
+    if GPIO.input(DATAPIN) == 0:
         position += 1
     else:
         position -= 1
@@ -223,6 +225,16 @@ def rotaryChange(direction):
         soundPath = posSwitch(random.choice(positions))
     # print(soundPath)
 
+    # Spiele record intro, wenn ausgewaehlt
+    if position%20 == 14:
+        soundPath = None
+        command = "pkill aplay"
+        os.system(command)
+
+        time.sleep(0.1)
+
+        command = "aplay " + recordIntro + " &"
+
     if soundPath is not None:
         if not os.listdir(soundPath) :
             print("Es gibt keine Datei zum Abspielen.")
@@ -235,7 +247,7 @@ def rotaryChange(direction):
                 listSounds.extend(filenames)
                 break
 
-            print(*listSounds, sep = "\n")
+            # print(*listSounds, sep = "\n")
 
             sound_item = random.choice(listSounds)
             command = "aplay " + soundPath + sound_item + " &"
@@ -332,6 +344,8 @@ def sensorTrigger(channel):
         print("Position reset.")
 
 def main():
+    global clkPinLast
+    
     # GPIO.setmode(GPIO.BCM)
     GPIO.setmode(GPIO.BOARD)
     GPIO.setwarnings(False)
@@ -363,7 +377,7 @@ def main():
     recordButton.start()
     hallIntro.start()
     hallSensor.start()
-    
+
     print('Start program loop...')
     print("Waiting ...")
     try:
@@ -371,8 +385,8 @@ def main():
             # von 17 bis 7Uhr geht die Beleuchtung an
             if datetime.datetime.now().time() >= datetime.time(17,0,0,0) or datetime.datetime.now().time() <= datetime.time(7,0,0,0):
                 GPIO.output(LED2PIN, True)
-            else: GPIO.output(LED2PIN, False)      
-            time.sleep(0.1)
+            else: GPIO.output(LED2PIN, False)
+            time.sleep(0.01)
     finally:
         print('Stopping GPIO monitoring...')
         ky040.stop()
