@@ -40,6 +40,8 @@ gFile = None
 
 # Position des Drehreglers
 position = 0
+clkPinLast = 0
+clkPinCurrent = 0
 
 # Liste mit allen Kategorien
 list_of_category = ["buildings", "events", "nature", "people", "misc"]
@@ -214,10 +216,6 @@ def rotaryChange(direction):
     else:
         position -= 1
 
-    print(str(position%20))
-    #lcd.lcd_clear()
-    #lcd.lcd_messageToLine("Position :" + str(position%20), 2)
-
     soundPath = posSwitch(position%20)
     # Wenn Shuffle ausgewaehlt ist, waehle eine "random" Kategorie
     if position%20 == 9:
@@ -239,21 +237,49 @@ def rotaryChange(direction):
         if not os.listdir(soundPath) :
             print("Es gibt keine Datei zum Abspielen.")
         else:
+            position -= 1
+
+        print(str(position%20))
+        #lcd.lcd_clear()
+        #lcd.lcd_messageToLine("Position :" + str(position%20), 2)
+
+        soundPath = posSwitch(position%20)
+        # Wenn Shuffle ausgewaehlt ist, waehle eine "random" Kategorie
+        if position%20 == 9:
+            positions = [0,3,4,9,1]
+            soundPath = posSwitch(random.choice(positions))
+        # print(soundPath)
+
+        # Spiele record intro, wenn ausgewaehlt
+        if position%20 == 14:
+            soundPath = None
             command = "pkill aplay"
             os.system(command)
 
-            listSounds = []
-            for (dirpath, dirnames, filenames) in os.walk(soundPath):
-                listSounds.extend(filenames)
-                break
+            time.sleep(0.1)
 
             # print(*listSounds, sep = "\n")
+            command = "aplay " + recordIntro + " &"
 
-            sound_item = random.choice(listSounds)
-            command = "aplay " + soundPath + sound_item + " &"
-            #lcd.lcd_messageToLine(sound_item, 1)
-            print(command)
-            os.system(command)
+        if soundPath is not None:
+            if not os.listdir(soundPath) :
+                print("Es gibt keine Datei zum Abspielen.")
+            else:
+                command = "pkill aplay"
+                os.system(command)
+
+                listSounds = []
+                for (dirpath, dirnames, filenames) in os.walk(soundPath):
+                    listSounds.extend(filenames)
+                    break
+
+                # print(*listSounds, sep = "\n")
+
+                sound_item = random.choice(listSounds)
+                command = "aplay " + soundPath + sound_item + " &"
+                #lcd.lcd_messageToLine(sound_item, 1)
+                print(command)
+                os.system(command)
 
 # Switch-Case fuer die Positionen des Drehreglers:
 # Gibt den Ordnerpfad zur Position aus
