@@ -4,7 +4,7 @@
     letzte Aederung: 07.01.2020
     Python Version: 3.7
     Getestet auf: Raspbian Buster
-    Benötigt: deepspeech 0.6.0 (https://github.com/mozilla/DeepSpeech)
+    Benötigt: deepspeech 0.6.1 (https://github.com/mozilla/DeepSpeech)
 '''
 
 from deepspeech import Model
@@ -12,9 +12,9 @@ import sys
 import scipy.io.wavfile as wav
 
 # nötige Daten für das trainierte Model
-MODEL_FILE = 'deepspeech-0.6.0-models/output_graph.tflite'
-LANG_MODEL = 'deepspeech-0.6.0-models/lm.binary'
-TRIE_FILE = 'deepspeech-0.6.0-models/trie'
+MODEL_FILE = 'deepspeech-0.6.1-models/output_graph.tflite'
+LANG_MODEL = 'deepspeech-0.6.1-models/lm.binary'
+TRIE_FILE = 'deepspeech-0.6.1-models/trie'
 
 def main(argv):
     if len(argv) < 1:
