@@ -76,21 +76,22 @@ HALLPIN = 37 # intro
 HALL2PIN = 36 # reset Drehregler
 
 # Kategorien
-nature = ['tree', 'trees', 'dog', 'dogs', 'cat', 'cats', 'squirrel',
-        'squirrels', 'park', 'bush', 'nature', 'wind', 'water', 'earth',
+nature = ['tree', 'trees', 'dog', 'dogs', 'cat', 'cats', 'squirrel', 'stone', 'rock', 'lake', 'stump', 'bush',
+        'squirrels', 'park', 'bush', 'nature', 'wind', 'water', 'earth', 'ground', 'gravel',
         'birch', 'bark', 'animal', 'animals', 'pet', 'pets', 'wood', 'rain', 'cloud',
-        'raining', 'sky', 'cloudy', 'windy', 'weather', 'sun', 'sunshine', 'forest']
-events = ['party', 'parties', 'concert', 'concerts',
-          'demo', 'demonstration', 'event', 'events', 'marathon'
-          'wedding', 'birthday', 'funeral']
+        'raining', 'sky', 'cloudy', 'windy', 'weather', 'sun', 'sunshine', 'forest', 'grass', 'garden']
+events = ['party', 'parties', 'concert', 'concerts', 'christmas', 'show',
+          'demo', 'demonstration', 'event', 'events', 'marathon', 'bar', 'restaurant', 'dinner', 'lunch',
+          'wedding', 'birthday', 'funeral', 'easter', 'graduation', 'fair', 'celebration']
 buildings = ['restaurant', 'restaurants', 'cafe', 'cinema', 'cinemas', 'kino',
-             'theatre', 'school', 'schools', 'church', 'churchs', 'apartment',
-             'apartmentcomplex', 'house', 'library', 'shop', 'store', 'supermarket',
-             'door', 'building', 'buildings']
+             'theatre', 'school', 'schools', 'church', 'churches', 'apartment', 'path',
+             'complex', 'house', 'library', 'shop', 'store', 'supermarket', 'street', 'streets', 'corner', 'road', 'roads',
+             'door', 'building', 'buildings', 'market', 'factory', 'company', 'train', 'station', 'airport']
 people = ['people', 'police', 'firefighter', 'teacher', 'child', 'children',
-          'pupil', 'student', 'students', 'grandmother', 'grandfather', 'father',
-          'mother', 'mom', 'dad', 'fiance', 'wife', 'husband', 'brother',
-          'sister', 'sibling', 'siblings', 'person', 'boyfriend', 'girlfriend', 'friend']
+          'pupil', 'student', 'students', 'grandmother', 'grandfather', 'father', 'community', 'communities', 'worker',
+          'mother', 'mom', 'dad', 'fiance', 'wife', 'husband', 'brother', 'shop keeper', 'owner', 'tenant', 'landlord', 'man',
+          'woman', 'women', 'men', 'boy',
+          'sister', 'sibling', 'siblings', 'person', 'boyfriend', 'girlfriend', 'friend', 'friends', 'daughter', 'son', 'girl']
 
 # Erstellt einen Dateinamen mit der aktuellen Zeit
 def nameFile():
