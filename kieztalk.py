@@ -301,7 +301,7 @@ def buttonPressed(channel):
         print("Möchtest du deine Aufnahme löschen? Drücke auf den jeweiligen Knopf.")
         start = time.process_time()
         while (time.process_time() - start) < 5:
-            if GPIO.input(BUTTON2]PIN) == GPIO.HIGH:
+            if GPIO.input(BUTTON2PIN) == GPIO.HIGH:
                 delete = True
                 break
             if GPIO.input(BUTTON3PIN) == GPIO.HIGH:
