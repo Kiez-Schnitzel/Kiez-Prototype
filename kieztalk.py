@@ -31,8 +31,8 @@ people = cwd + '/Audios/people/'
 misc = cwd + '/Audios/misc/'
 
 # Dateiname vom intro
-introFile = 'ex1.wav'
-recordIntro = 'recordIntro.wav'
+introFile = 'kieztalkerIntroGeschichten.wav'
+recordIntro = 'kieztalkerIntroAufnahme.wav'
 
 # global record Filename
 filename = None
@@ -184,7 +184,7 @@ def playIntro(channel):
         # print(command)
         os.system(command)
 
-        time.sleep(0.1)
+        time.sleep(0.01)
 
         command = "aplay " + introFile + " &"
         #lcd.lcd_messageToLine(sound_item, 1)
@@ -198,7 +198,7 @@ def playIntro(channel):
         # print(command)
         os.system(command)
 
-        time.sleep(0.1)
+        time.sleep(0.01)
         print("Trichter wurde zurueck gehaengt...")
         mounted = True
         # print(GPIO.input(channel), mounted)
@@ -209,9 +209,9 @@ def rotaryChange(direction):
     global position
 
 
-    if GPIO.input(DATAPIN) == 0:
+    if GPIO.input(DATAPIN) == 1:
         position += 1
-    else:
+    if GPIO.input(DATAPIN) == 0:
         position -= 1
 
     print(str(position%20))
@@ -230,10 +230,13 @@ def rotaryChange(direction):
         soundPath = None
         command = "pkill aplay"
         os.system(command)
+        print(command)
 
-        time.sleep(0.1)
+        time.sleep(0.01)
 
         command = "aplay " + recordIntro + " &"
+        os.system(command)
+        print(command)
 
     if soundPath is not None:
         if not os.listdir(soundPath) :
@@ -298,7 +301,7 @@ def buttonPressed(channel):
         print("Möchtest du deine Aufnahme löschen? Drücke auf den jeweiligen Knopf.")
         start = time.process_time()
         while (time.process_time() - start) < 5:
-            if GPIO.input(BUTTON2PIN) == GPIO.HIGH:
+            if GPIO.input(BUTTON2]PIN) == GPIO.HIGH:
                 delete = True
                 break
             if GPIO.input(BUTTON3PIN) == GPIO.HIGH:
@@ -310,6 +313,9 @@ def buttonPressed(channel):
         if delete == False and gFile is not None:
             try:
                 print("Start")
+                GPIO.output(LEDPIN, True)
+                time.sleep(0.25)
+                GPIO.output(LEDPIN, False)
                 p = Process(target=audioProcessing, args=(filename,gFile, ))
                 p.start()
                 # p.join()
@@ -323,6 +329,13 @@ def buttonPressed(channel):
             gFile = None
             filename = None
             
+            GPIO.output(LEDPIN, True)
+            time.sleep(0.25)
+            GPIO.output(LEDPIN, False)
+            time.sleep(0.25)
+            GPIO.output(LEDPIN, True)
+            time.sleep(0.25)
+            GPIO.output(LEDPIN, False)
             print("Aufnahme wurde gelöscht.")
 
 
