@@ -54,7 +54,7 @@ TRIE_FILE = 'deepspeech-0.6.1-models/trie'
 # Alle Pinbelegungen:
 # Buttons:
 BUTTONPIN = 11   # record
-BUTTON2PIN = 13 # delete
+BUTTON2PIN = 7 # delete
 BUTTON3PIN = 35 # save
 #BUTTONINTROPIN = 12
 
@@ -63,7 +63,7 @@ mounted = True
 
 
 # LEDs
-LEDPIN = 7  # record
+LEDPIN = 13  # record
 LED2PIN = 5 # Beleuchtung
 
 # Drehregler
