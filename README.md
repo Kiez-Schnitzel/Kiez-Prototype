@@ -1,5 +1,5 @@
 # KiezTalker
-readme version: 2020-02-15
+readme version: 2020-02-20
 
 ## A device for listening and recording its users personal stories
 
@@ -9,14 +9,14 @@ design by Cindy Peng, Antonia Nandori (Kunsthochschule Berlin-Weißensee)
 
 ## Table of contents
 
-### 1. Project Description  
-#### 1.1 Overview  
-#### 1.2 Design Concept  
-#### 1.3 List of Parts  
-#### 1.4 Required Libraries  
-### 2. Installation  
-### 3. How To Use 
-### Appendix
+- 1. Project Description  
+- 1.1 Overview  
+- 1.2 Design Concept  
+- 1.3 List of Parts  
+- 1.4 Required Libraries  
+- 2. Installation  
+- 3. How To Use  
+- Appendix  
 
 ### 1. Project Description
 #### 1.1 Overview  
@@ -68,14 +68,14 @@ Miscellaneous:
 - magnets
 
 #### 1.4 Required Libraries
-It is recommended to install the required libraries using pip. The most important library used is Mozilla's DeepSpeech, a Speech-To-Text library. Which has both the advantages that is Open Source and does not need a connection to the internet to work. As of now there is only a pre-trained English model available.
+It is recommended to install the required libraries using pip. The most important library used is Mozilla's DeepSpeech, a Speech-To-Text library. Which has both the advantages that it is Open Source and does not need a connection to the internet to work. As of now, there is only a pre-trained English model available.
 
 Quick installation guide (for further information, please refer to the DeepSpeech documentation):
 - deepspeech 0.6.1 (https://github.com/mozilla/DeepSpeech)
 - Install DeepSpeech
    pip3 install deepspeech
-- Download pre-trained English model and extract
-   curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.6.1/deepspeech-0.6.1-models.tar.gz
+- Download pre-trained English model and extract  
+   curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.6.1/deepspeech-0.6.1-models.tar.gz  
    tar xvf deepspeech-0.6.1-models.tar.gz
 - place the folder deepspeech-0.6.1-models in the main directory of this repository
 
@@ -93,8 +93,10 @@ Installation is straight forward.
 
 - install the required libraries
 - download this repository
-- connect all the parts to their respective GPIO pins on your RaspberryPi (see the pictures for reference)
+- connect all the parts to their respective GPIO pins on your RaspberryPi (see the pictures for reference)  
+- LEDs are connected to ground (GND) and a datapin, buttons are connected to power (5V) and their respective datapins  
 - simply type 'pinout' into a terminal window of your RaspberryPi for the GPIO pin layout or refer to www.pinout.xyz 
+- the physical pin layout is used   
 - run kieztalk.py  
 
 ![fig01](images/cone.png)  
@@ -115,10 +117,13 @@ The buttons for recording, saving and deleting are located inside the cone. The 
 When the user is finished using the device, he or she simply reattaches the cone to the pillar, the device stays in idle mode and waits for user input. 
 
 ### Appendix
-- License: Free to use and modify for personal, educational and non-commercial purposes. 
+- License: Published under the Creative Commons Attribution 4.0 International License, however use for non-commercial purposes is recommended. 
 
 - Weblinks:   
-https://www.citylab-berlin.org/events/entitycity/
+https://www.citylab-berlin.org/events/entitycity/  
+
+Video explaining functions:  
+https://youtu.be/RhopoLg86mg
 
 
 
