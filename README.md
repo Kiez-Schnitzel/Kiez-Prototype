@@ -153,7 +153,7 @@ Place the folder deepspeech-0.6.1-models in the main directory of this repositor
 
 ##### Hardware
 The physical pin layout is used: `GPIO.setmode(GPIO.BOARD)`.
-To see the GPIO pin layout refer to [www.pinout.xyz](www.pinout.xyz) or type `pinout` in a terminal window of your RaspberryPi.
+To see the GPIO pin layout refer to [www.pinout.xyz](https://pinout.xyz) or type `pinout` in a terminal window of your RaspberryPi.
 
 
 - connect all the parts to their respective GPIO pins on your RaspberryPi ([see pictures](#pics)) 
