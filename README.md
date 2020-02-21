@@ -8,17 +8,18 @@ design by Cindy Peng, Antonia Nandori (Kunsthochschule Berlin-Weißensee)
 
 
 ## Table of contents
+- 1 [Project Description](#description)
+	- 1.1 [Overview](#overview)
+	- 1.2 [Design Concept](#concept)  
+	- 1.3 [List of Parts](#parts)
+	- 1.4 [Required Libraries](#libs)
+- 2 [Installation](#install)  
+- 3 [How To Use](#howto)  
+- 4 [Appendix](#appendix)
 
-- 1. Project Description  
-- 1.1 Overview  
-- 1.2 Design Concept  
-- 1.3 List of Parts  
-- 1.4 Required Libraries  
-- 2. Installation  
-- 3. How To Use  
-- Appendix  
-
+<a name="description"/>
 ### 1. Project Description
+<a name="overview"/>
 #### 1.1 Overview  
 The project KiezTalk was created during a collaboration project of the the computer science department of the Freie Universität Berlin and the product design department of the Kunsthochschule Berlin-Weißensee, during the winter semester 2019/2020.  
 
@@ -30,6 +31,7 @@ The KiezTalker consist of a stationary part, the 'pillar' and a detachable part 
 
 Several parts are installed inside of the cone. Firstly, a microphone and speakers. Secondly, three buttons, one for recording, one for saving a recorded audio file and one to delete a recording. A red LED is used to indicate, when a recording is active.
 
+<a name="concept"/>
 #### 1.2 Design Concept
 
 KiezTalk  
@@ -46,59 +48,112 @@ Reminiscent of a paper cup and string telephone, the truncated cone serves as bo
 **KiezTalk aims to strengthen the sense of community**  
 It represents the true diversity of life in urban areas. Stories collected over time can be archived in local museums, preserving the recent history of a place. It's people who make the city what is, so it's only right the story of a place is told by those who know it best.
 
+<a name="parts"/>
 #### 1.3 List of Parts
 
 This section list the required hardware components to build a KiezTalker device.
 
 - Raspberry Pi 3 or 4 (including accessories, like an SD-card, power supply etc.)
 - 3x push button
-- 2x Hall effect sensor
+- 2x hall effect sensor
 - 1x colored LED (record light)
 - 1x LED (for illumination, optional)
-- 1x rotary dial (knob)
+- 1x rotary encoder (knob)
 - 1x microphone
 - 1x speakers
-- 1x a generic USB-soundcard is needed to connect a microphone to the Raspi
+- 1x generic USB-soundcard (to connect a microphone to the Raspi)
 
 Miscellaneous:
 
 - cables (a healthy variety of jumper wires with male and female connectors is recommended)
 - breadboard (recommended for testing purposes)
 - resistors
+- capacitors
 - magnets
 
+<a name="libs"/>
 #### 1.4 Required Libraries
-It is recommended to install the required libraries using pip. The most important library used is Mozilla's DeepSpeech, a Speech-To-Text library. Which has both the advantages that it is Open Source and does not need a connection to the internet to work. As of now, there is only a pre-trained English model available.
 
-Quick installation guide (for further information, please refer to the DeepSpeech documentation):
-- deepspeech 0.6.1 (https://github.com/mozilla/DeepSpeech)
-- Install DeepSpeech
-   pip3 install deepspeech
-- Download pre-trained English model and extract  
-   curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.6.1/deepspeech-0.6.1-models.tar.gz  
-   tar xvf deepspeech-0.6.1-models.tar.gz
-- place the folder deepspeech-0.6.1-models in the main directory of this repository
+To install:
+- RPi.GPIO (usually preinstalled)
+- deepspeech
+- numpy
+- PyAudio
+- pydub
+- scipy
 
 Additional libraries:
-- GPIO (for talking to the GPIO pins)
 - shutil (for manipulating files)
-- sys, os, time, datetime, random (to add sleep function and get the system time)
-- scipy
-- recorder
+- sys, os, time, datetime, random
 - multiprocessing (adds multiprocessing, so you can still interact with the device, while DeepSpeech is working)
-- pydub (for volume control)
 
+<a name="install"/>
 ### 2. Installation
-Installation is straight forward.  
+It is recommended to install the required libraries using pip. The most important library used is Mozilla's DeepSpeech, a Speech-To-Text library. Which has both the advantages that it is Open Source and does not need a connection to the internet to work. As of now, there is only a pre-trained English model available.
 
-- install the required libraries
-- download this repository
-- connect all the parts to their respective GPIO pins on your RaspberryPi (see the pictures for reference)  
-- LEDs are connected to ground (GND) and a datapin, buttons are connected to power (5V) and their respective datapins  
-- simply type 'pinout' into a terminal window of your RaspberryPi for the GPIO pin layout or refer to www.pinout.xyz 
-- the physical pin layout is used   
-- run kieztalk.py  
+Installation is straight forward.
 
+##### Download the repository
+
+`$ git clone https://github.com/Kiez-Schnitzel/Kiez-Prototype.git`
+
+##### Install libraries
+Using the requirements.txt:
+
+`$ pip3 install -r requirements.txt `
+
+or manually:
+
+
+```
+# RPi.gpio
+$ pip3 install rpi.gpio
+
+# deepspeech (including numpy)
+$ pip3 install deepspeech
+
+# scipy
+$ pip3 install scipy
+
+# PyAudio
+$ pip3 install pyaudio
+
+# pydub
+$ pip3 install pydub
+```
+
+For further information, please refer to the libraries documentations.
+
+##### Deepspeech model 
+
+(Tested with version 0.6.1)
+
+[Deepspeech repository](https://github.com/mozilla/DeepSpeech)
+
+Download pre-trained English model and extract 
+```
+# Download
+$ curl -LO https://github.com/mozilla/DeepSpeech/releases/download/v0.6.1/deepspeech-0.6.1-models.tar.gz 
+
+# Extract
+$ tar xvf deepspeech-0.6.1-models.tar.gz
+```
+Place the folder deepspeech-0.6.1-models in the main directory of this repository.
+
+##### Hardware
+The physical pin layout is used: `GPIO.setmode(GPIO.BOARD)`.
+To see the GPIO pin layout refer to [www.pinout.xyz](#www.pinout.xyz) or type `pinout` in a terminal window of your RaspberryPi.
+
+
+- connect all the parts to their respective GPIO pins on your RaspberryPi ([see pictures](#pics)) 
+- LEDs are connected to ground (GND) and a datapin
+- buttons are connected to power (5V) and their respective datapins  
+
+Start the KiezTalker software:
+`$ python3 kieztalk.py`  .
+
+
+<a name="pics"/>
 ![fig01](images/cone.png)  
 
 ![fig02](images/dial.png)  
@@ -107,7 +162,11 @@ Installation is straight forward.
 
 ![fig04](images/reset.png)  
 
-#### 3. How To Use  
+
+*The standard audio device may need to be changed. For more information look [HERE](https://www.raspberrypi-spy.co.uk/2019/06/using-a-usb-audio-device-with-the-raspberry-pi/).*
+
+<a name="howto"/>
+### 3. How To Use  
 In idle mode the cone is connected to the pillar. The Hall effect sensor inside the cone detects the magnet inside the pillar, when the cone is removed the magnetic field changes and the Intro audio file starts playing.  
 
 After listening to the intro, it is up to the user, if he or she wants to listen or record an audio file. The dial knob is used to choose a category and then an audio file is played from this category. An additional postion on the dial knob is used to play an introductory message on how to record an audio file.  
@@ -116,15 +175,15 @@ The buttons for recording, saving and deleting are located inside the cone. The 
 
 When the user is finished using the device, he or she simply reattaches the cone to the pillar, the device stays in idle mode and waits for user input. 
 
+<a name="appendix"/>
 ### Appendix
-- License: Published under the Creative Commons Attribution 4.0 International License, however use for non-commercial purposes is recommended. 
+- License:  
+Published under the Creative Commons Attribution 4.0 International License, however use for non-commercial purposes is recommended. 
 
-- Weblinks:   
+- Weblinks:  
+https://interaktion-produktdesign-khb.de  
 https://www.citylab-berlin.org/events/entitycity/  
 
 Video explaining functions:  
 https://youtu.be/RhopoLg86mg
-
-
-
 
