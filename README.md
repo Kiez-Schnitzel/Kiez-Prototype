@@ -98,7 +98,9 @@ Additional libraries:
 
 ### 2. Installation
 
-It is recommended to install the required libraries using pip. The most important library used is Mozilla's DeepSpeech, a Speech-To-Text library. Which has both the advantages that it is Open Source and does not need a connection to the internet to work. As of now, there is only a pre-trained English model available.
+It is recommended to install the required libraries using `pip` inside a virtual environment. For more information please follow the official tutorial [Virtual Environments and Packages](#https://docs.python.org/3/tutorial/venv.html).
+
+The most important library used is Mozilla's DeepSpeech, a Speech-To-Text library. Which has both the advantages that it is Open Source and does not need a connection to the internet to work. As of now, there is only a pre-trained English model available.
 
 Installation is straight forward.
 
