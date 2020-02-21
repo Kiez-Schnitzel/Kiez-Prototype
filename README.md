@@ -194,7 +194,7 @@ When the user is finished using the device, he or she simply reattaches the cone
 - License:  
 Published under the Creative Commons Attribution 4.0 International License, however use for non-commercial purposes is recommended.
 - Weblinks:  
-[FU Berlin: Human-Centered Computing News](https://www.mi.fu-berlin.de/en/inf/groups/hcc/news/entcit-exhibition-opening.html)
+[FU Berlin: Human-Centered Computing News](https://www.mi.fu-berlin.de/en/inf/groups/hcc/news/entcit-exhibition-opening.html)  
 https://interaktion-produktdesign-khb.de  
 https://www.citylab-berlin.org/events/entitycity/  
 
