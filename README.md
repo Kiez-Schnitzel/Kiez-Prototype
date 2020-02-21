@@ -201,6 +201,6 @@ https://www.citylab-berlin.org/events/entitycity/
 Video explaining functions:  
 https://youtu.be/RhopoLg86mg
 
-Concept Video:
+Concept Video:  
 https://vimeo.com/393039435
 
