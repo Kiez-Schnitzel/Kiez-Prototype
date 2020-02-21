@@ -98,7 +98,7 @@ Additional libraries:
 
 ### 2. Installation
 
-It is recommended to install the required libraries using `pip` inside a virtual environment. For more information please follow the official tutorial [Virtual Environments and Packages](#https://docs.python.org/3/tutorial/venv.html).
+It is recommended to install the required libraries using `pip` inside a virtual environment. For more information please follow the official tutorial [Virtual Environments and Packages](https://docs.python.org/3/tutorial/venv.html).
 
 The most important library used is Mozilla's DeepSpeech, a Speech-To-Text library. Which has both the advantages that it is Open Source and does not need a connection to the internet to work. As of now, there is only a pre-trained English model available.
 
@@ -153,7 +153,7 @@ Place the folder deepspeech-0.6.1-models in the main directory of this repositor
 
 ##### Hardware
 The physical pin layout is used: `GPIO.setmode(GPIO.BOARD)`.
-To see the GPIO pin layout refer to [www.pinout.xyz](#www.pinout.xyz) or type `pinout` in a terminal window of your RaspberryPi.
+To see the GPIO pin layout refer to [www.pinout.xyz](www.pinout.xyz) or type `pinout` in a terminal window of your RaspberryPi.
 
 
 - connect all the parts to their respective GPIO pins on your RaspberryPi ([see pictures](#pics)) 
