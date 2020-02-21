@@ -163,6 +163,7 @@ Start the KiezTalker software:
 
 
 <a name="pics"/>
+
 ![fig01](images/cone.png)  
 
 ![fig02](images/dial.png)  
@@ -189,8 +190,7 @@ When the user is finished using the device, he or she simply reattaches the cone
 
 ### Appendix
 - License:  
-Published under the Creative Commons Attribution 4.0 International License, however use for non-commercial purposes is recommended. 
-
+Published under the Creative Commons Attribution 4.0 International License, however use for non-commercial purposes is recommended.
 - Weblinks:  
 https://interaktion-produktdesign-khb.de  
 https://www.citylab-berlin.org/events/entitycity/  
