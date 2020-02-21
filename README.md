@@ -17,10 +17,14 @@ design by Cindy Peng, Antonia Nandori (Kunsthochschule Berlin-Weißensee)
 - 3 [How To Use](#howto)  
 - 4 [Appendix](#appendix)
 
-<a name="description"/>
-### 1. Project Description
-<a name="overview"/>
+<a name="description"/>  
+
+###  1. Project Description 
+
+<a name="overview"/>  
+
 #### 1.1 Overview  
+
 The project KiezTalk was created during a collaboration project of the the computer science department of the Freie Universität Berlin and the product design department of the Kunsthochschule Berlin-Weißensee, during the winter semester 2019/2020.  
 
 The goal of the project was to develop devices for a smart city. Thus, the KiezTalker was born. Technically speaking, a Raspberry Pi is used to record audio files ('user stories'), these audio files are then analyzed using Speech-to-text. This text is then checked for keywords and categorized into one of five categories. The categories are: people, buildings, nature, events and a miscellaneous for audio files, which do not fit in any of these categories.  
@@ -31,8 +35,9 @@ The KiezTalker consist of a stationary part, the 'pillar' and a detachable part 
 
 Several parts are installed inside of the cone. Firstly, a microphone and speakers. Secondly, three buttons, one for recording, one for saving a recorded audio file and one to delete a recording. A red LED is used to indicate, when a recording is active.
 
-<a name="concept"/>
-#### 1.2 Design Concept
+<a name="concept"/>  
+
+#### 1.2 Design Concept  
 
 KiezTalk  
 Locals Become Locals  
@@ -48,7 +53,8 @@ Reminiscent of a paper cup and string telephone, the truncated cone serves as bo
 **KiezTalk aims to strengthen the sense of community**  
 It represents the true diversity of life in urban areas. Stories collected over time can be archived in local museums, preserving the recent history of a place. It's people who make the city what is, so it's only right the story of a place is told by those who know it best.
 
-<a name="parts"/>
+<a name="parts"/>  
+
 #### 1.3 List of Parts
 
 This section list the required hardware components to build a KiezTalker device.
@@ -71,7 +77,8 @@ Miscellaneous:
 - capacitors
 - magnets
 
-<a name="libs"/>
+<a name="libs"/>  
+
 #### 1.4 Required Libraries
 
 To install:
@@ -87,8 +94,10 @@ Additional libraries:
 - sys, os, time, datetime, random
 - multiprocessing (adds multiprocessing, so you can still interact with the device, while DeepSpeech is working)
 
-<a name="install"/>
+<a name="install"/>  
+
 ### 2. Installation
+
 It is recommended to install the required libraries using pip. The most important library used is Mozilla's DeepSpeech, a Speech-To-Text library. Which has both the advantages that it is Open Source and does not need a connection to the internet to work. As of now, there is only a pre-trained English model available.
 
 Installation is straight forward.
@@ -166,6 +175,7 @@ Start the KiezTalker software:
 *The standard audio device may need to be changed. For more information look [HERE](https://www.raspberrypi-spy.co.uk/2019/06/using-a-usb-audio-device-with-the-raspberry-pi/).*
 
 <a name="howto"/>
+
 ### 3. How To Use  
 In idle mode the cone is connected to the pillar. The Hall effect sensor inside the cone detects the magnet inside the pillar, when the cone is removed the magnetic field changes and the Intro audio file starts playing.  
 
@@ -176,6 +186,7 @@ The buttons for recording, saving and deleting are located inside the cone. The 
 When the user is finished using the device, he or she simply reattaches the cone to the pillar, the device stays in idle mode and waits for user input. 
 
 <a name="appendix"/>
+
 ### Appendix
 - License:  
 Published under the Creative Commons Attribution 4.0 International License, however use for non-commercial purposes is recommended. 
