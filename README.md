@@ -33,7 +33,9 @@ The categorized audio files can be retrieved by users using a dial knob, which l
 
 The KiezTalker consist of a stationary part, the 'pillar' and a detachable part the 'cone'. The dial knob is located inside the pillar and a Hall effect sensor, inside a rotating cover, is used to reset the dial knob once every full rotation, to reset the dial to the zeroing position.  
 
-Several parts are installed inside of the cone. Firstly, a microphone and speakers. Secondly, three buttons, one for recording, one for saving a recorded audio file and one to delete a recording. A red LED is used to indicate, when a recording is active.
+Several parts are installed inside of the cone. Firstly, a microphone and speakers. Secondly, three buttons, one for recording, one for saving a recorded audio file and one to delete a recording. A red LED is used to indicate, when a recording is active.  
+
+![fig00](images/kieztalker.png)  
 
 <a name="concept"/>  
 
@@ -186,7 +188,9 @@ After listening to the intro, it is up to the user, if he or she wants to listen
 
 The buttons for recording, saving and deleting are located inside the cone. The save and delete buttons have no functions, only after a recording has been made they are active and can be used to make a choice.  
 
-When the user is finished using the device, he or she simply reattaches the cone to the pillar, the device stays in idle mode and waits for user input. 
+When the user is finished using the device, he or she simply reattaches the cone to the pillar, the device stays in idle mode and waits for user input.  
+
+Ideally the KiezTalker is placed in an urban enviroment, accessible to the public.
 
 <a name="appendix"/>
 
